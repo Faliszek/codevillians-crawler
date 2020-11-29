@@ -10,7 +10,7 @@ import {
 import { Main } from "./views/Main";
 import { FAQ } from "./views/FAQ";
 import "./tailwind.output.css";
-import "antd/dist/antd.css";
+import "antd/dist/antd.less";
 import { Database, HelpCircle } from "react-feather";
 
 function Menu() {
@@ -37,11 +37,6 @@ function Menu() {
           <HelpCircle />
           <span className="py-1 font-medium px-4">FAQ</span>
         </NavLink>
-        {/* <li>
-          <Link to="/faq">
-           
-          </Link>
-        </li> */}
       </ul>
     </nav>
   );
@@ -52,8 +47,6 @@ function App() {
     <Router>
       <div className="flex bg-gray-100">
         <Menu />
-        {/* A <Switch> looks through its children <Route>s and
-          renders the first one that matches the current URL. */}
         <div className="flex-1 p-16">
           <Switch>
             <Route path="/faq">
