@@ -53,6 +53,9 @@ function App() {
             <Route path="/results/:jobId/:depth">
               <Results />
             </Route>
+            <Route path="/results/:jobId/">
+              <Results />
+            </Route>
             <Route path="/faq">
               <FAQ />
             </Route>
