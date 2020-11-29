@@ -10,10 +10,11 @@ import {
 import { Main } from "./views/Main";
 import { FAQ } from "./views/FAQ";
 import { Results } from "./views/Results";
+import { History } from "./views/History";
 import "./tailwind.output.css";
 import "antd/dist/antd.less";
 import "./index.css";
-import { Database, HelpCircle } from "react-feather";
+import { Database, HelpCircle, Search } from "react-feather";
 
 function Menu() {
   return (
@@ -22,8 +23,19 @@ function Menu() {
         <li className="mb-2">
           <NavLink
             to="/"
+            exact={true}
             activeClassName="bg-white text-blue-400 "
-            className="text-lg text-white flex items-center py-2 px-2 transition rounded-xl"
+            className="text-lg text-white flex items-center py-2 px-2 transition rounded-xl hover:text-blue-100"
+          >
+            <Search />
+            <span className="py-1 font-medium px-4">Rezultaty</span>
+          </NavLink>
+        </li>
+        <li className="mb-2">
+          <NavLink
+            to="/search"
+            activeClassName="bg-white text-blue-400 "
+            className="text-lg text-white flex items-center py-2 px-2 transition rounded-xl hover:text-blue-100"
           >
             <Database />
             <span className="py-1 font-medium px-4">Wyszukaj</span>
@@ -33,7 +45,7 @@ function Menu() {
           to="/faq"
           exact={true}
           activeClassName="bg-white text-blue-400 "
-          className="text-lg text-white flex items-center  py-2 px-2 transition rounded-xl"
+          className="text-lg text-white flex items-center  py-2 px-2 transition rounded-xl hover:text-blue-100"
         >
           <HelpCircle />
           <span className="py-1 font-medium px-4">FAQ</span>
@@ -59,8 +71,11 @@ function App() {
             <Route path="/faq">
               <FAQ />
             </Route>
-            <Route path="/">
+            <Route path="/search">
               <Main />
+            </Route>
+            <Route path="/">
+              <History />
             </Route>
           </Switch>
         </div>

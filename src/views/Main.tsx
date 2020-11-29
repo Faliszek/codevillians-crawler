@@ -5,6 +5,7 @@ import { Page } from "../Page";
 
 import { gql, useMutation } from "@apollo/client";
 import { ButtonSpinner } from "../ButtonSpinner";
+import { Input } from "../Input";
 import { notification } from "antd";
 
 type Action =
@@ -47,38 +48,6 @@ function reducer(state: State, action: Action): State {
 const initialState: State = {
   searches: [{ id: 0, value: "" }],
 };
-
-const Input = (props: {
-  onChange: (v: string) => void;
-  value: string;
-  onEnter: () => void;
-}) => {
-  const ref = useRef(null);
-
-  useEffect(() => {
-    if (ref && ref.current) {
-      //@ts-ignore
-      ref.current.focus();
-    }
-  }, []);
-
-  return (
-    <input
-      ref={ref}
-      onKeyDown={(e) =>
-        //@ts-ignore
-        e.code === "Enter" ? props.onEnter() : null
-      }
-      value={props.value}
-      className="rounded-md border px-4 py-2 flex-1 items-center"
-      placeholder="Wprowadź frazę do wyszukiwania"
-      onChange={(e) => {
-        props.onChange(e.target.value);
-      }}
-    />
-  );
-};
-
 type R = Reducer<State, Action>;
 
 const GET_JOB = gql`
@@ -91,6 +60,7 @@ const GET_JOB = gql`
     $bitcoinAddressEnabled: Boolean!
     $ssnNumberEnabled: Boolean!
     $creditCardEnabled: Boolean!
+    $selectedDomains: [String!]!
   ) {
     startCrawling(
       phrases: $phrases
@@ -101,94 +71,151 @@ const GET_JOB = gql`
       bitcoinAddressEnabled: $bitcoinAddressEnabled
       ssnNumberEnabled: $ssnNumberEnabled
       creditCardEnabled: $creditCardEnabled
+      selectedDomains: $selectedDomains
     )
   }
 `;
 
+export const useSearch = () => useReducer<R>(reducer, initialState);
+
 export function Main() {
-  const [state, dispatch] = useReducer<R>(reducer, initialState);
+  const [state, dispatch] = useSearch();
   const history = useHistory();
   const [addJob, { loading }] = useMutation(GET_JOB);
+  const [domains, dispatch1] = useSearch();
 
   return (
     <Page title="Wyszukaj">
       <div className="w-full">
-        <div className="flex flex-row w-full">
-          <div className="flex  flex-col w-2/3">
-            {state.searches.map((s) => (
-              <div key={s.id} className="mb-4 flex items-center">
-                <Input
-                  value={s.value}
-                  onChange={(value) => {
-                    dispatch({
-                      type: "setSearch",
-                      payload: { id: s.id, value },
-                    });
-                  }}
-                  onEnter={() => dispatch({ type: "addSearch" })}
-                />
-                <div className="ml-2 w-6 h-6 flex items-center justify-center">
-                  {s.id !== 0 && (
-                    <MinusCircle
-                      className="cursor-pointer"
-                      color="red"
-                      onClick={() =>
-                        dispatch({
-                          type: "removeSearch",
-                          payload: { id: s.id },
-                        })
-                      }
-                    />
-                  )}
+        <h2 className="text-xl">Słowa kluczowe</h2>
+        <div className="w-full">
+          <div className="flex flex-row w-full">
+            <div className="flex  flex-col w-2/3">
+              {state.searches.map((s) => (
+                <div key={s.id} className="mb-4 flex items-center">
+                  <Input
+                    value={s.value}
+                    onChange={(value) => {
+                      dispatch({
+                        type: "setSearch",
+                        payload: { id: s.id, value },
+                      });
+                    }}
+                    onEnter={() => dispatch({ type: "addSearch" })}
+                  />
+                  <div className="ml-2 w-6 h-6 flex items-center justify-center">
+                    {s.id !== 0 && (
+                      <MinusCircle
+                        className="cursor-pointer"
+                        color="red"
+                        onClick={() =>
+                          dispatch({
+                            type: "removeSearch",
+                            payload: { id: s.id },
+                          })
+                        }
+                      />
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-1 items-center justify-center">
-            <button
-              onClick={() => dispatch({ type: "addSearch" })}
-              className="px-6 py-2 rounded-full shadow-lg text-blue-400 font-extrabold flex items-center justify-center bg-blue-100 focus:ring-2 focus:ring-blue-600 my-2 hover:bg-blue-400 hover:text-white transition-colors "
-            >
-              <Plus size={24} />
+              ))}
+            </div>
+            <div className="flex flex-1 items-center justify-center">
+              <button
+                onClick={() => dispatch({ type: "addSearch" })}
+                className="px-6 py-2 rounded-full shadow-lg text-blue-400 font-extrabold flex items-center justify-center bg-blue-100 focus:ring-2 focus:ring-blue-600 my-2 hover:bg-blue-400 hover:text-white transition-colors "
+              >
+                <Plus size={24} />
 
-              <span className="pl-4">Dodaj</span>
-            </button>
+                <span className="pl-4">Dodaj</span>
+              </button>
+            </div>
           </div>
         </div>
-        <div className="flex justify-center mt-4">
-          <button
-            className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors   focus:ring-2 focus:ring-blue-600"
-            onClick={() => {
-              addJob({
-                variables: {
-                  phrases: state.searches
-                    .filter((s) => s.value !== "")
-                    .map((s) => s.value),
-                  operator: "AND",
-                  iterations: 1,
-                  emailEntityEnabled: true,
-                  phoneNumberEntityEnabled: true,
-                  bitcoinAddressEnabled: true,
-                  ssnNumberEnabled: true,
-                  creditCardEnabled: true,
-                },
-              })
-                .then((res) => {
-                  history.push(`/results/${res?.data?.startCrawling}`);
+        <div className="h-12" />
+        <h2 className="text-xl">Domeny</h2>
+        <div className="w-full">
+          <div className="flex flex-row w-full">
+            <div className="flex  flex-col w-2/3">
+              {domains.searches.map((s) => (
+                <div key={s.id} className="mb-4 flex items-center">
+                  <Input
+                    value={s.value}
+                    placeholder="Wprowadź domenę"
+                    onChange={(value) => {
+                      dispatch1({
+                        type: "setSearch",
+                        payload: { id: s.id, value },
+                      });
+                    }}
+                    onEnter={() => dispatch1({ type: "addSearch" })}
+                  />
+                  <div className="ml-2 w-6 h-6 flex items-center justify-center">
+                    {s.id !== 0 && (
+                      <MinusCircle
+                        className="cursor-pointer"
+                        color="red"
+                        onClick={() =>
+                          dispatch1({
+                            type: "removeSearch",
+                            payload: { id: s.id },
+                          })
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-1 items-center justify-center">
+              <button
+                onClick={() => dispatch1({ type: "addSearch" })}
+                className="px-6 py-2 rounded-full shadow-lg text-blue-400 font-extrabold flex items-center justify-center bg-blue-100 focus:ring-2 focus:ring-blue-600 my-2 hover:bg-blue-400 hover:text-white transition-colors "
+              >
+                <Plus size={24} />
+
+                <span className="pl-4">Dodaj</span>
+              </button>
+            </div>
+          </div>
+          <div className="flex justify-center mt-4">
+            <button
+              className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors   focus:ring-2 focus:ring-blue-600"
+              onClick={() => {
+                addJob({
+                  variables: {
+                    phrases: state.searches
+                      .filter((s) => s.value !== "")
+                      .map((s) => s.value),
+                    operator: "AND",
+                    iterations: 1,
+                    emailEntityEnabled: true,
+                    phoneNumberEntityEnabled: true,
+                    bitcoinAddressEnabled: true,
+                    ssnNumberEnabled: true,
+                    creditCardEnabled: true,
+                    selectedDomains: domains.searches
+                      .filter((s) => s.value !== "")
+                      .map((s) => s.value),
+                  },
                 })
-                .catch(() =>
-                  notification.error({
-                    message: "Wystąpił błąd",
-                    description:
-                      "Wystąpił nieoczekiwany błąd podczas próby komunikacji z serwerem",
+                  .then((res) => {
+                    history.push(`/results/${res?.data?.startCrawling}`);
                   })
-                );
-            }}
-          >
-            <span className="pr-4">Wyszukaj</span>
-            <ArrowRight />
-            <ButtonSpinner loading={loading} />
-          </button>
+                  .catch(() =>
+                    notification.error({
+                      message: "Wystąpił błąd",
+                      description:
+                        "Wystąpił nieoczekiwany błąd podczas próby komunikacji z serwerem",
+                    })
+                  );
+              }}
+            >
+              <span className="pr-4">Wyszukaj</span>
+              <ArrowRight />
+              <ButtonSpinner loading={loading} />
+            </button>
+          </div>
         </div>
       </div>
     </Page>

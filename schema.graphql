@@ -17,8 +17,10 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  startCrawling(phrases: [String!]!, operator: String!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!, bitcoinAddressEnabled: Boolean!, ssnNumberEnabled: Boolean!, creditCardEnabled: Boolean!): String!
+  startCrawling(phrases: [String!]!, operator: String!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!, bitcoinAddressEnabled: Boolean!, ssnNumberEnabled: Boolean!, creditCardEnabled: Boolean!, selectedDomains: [String!]!): String!
   crawlChoosenEntities(parentJobId: String!, entityValues: [String!]!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!, bitcoinAddressEnabled: Boolean!, ssnNumberEnabled: Boolean!, creditCardEnabled: Boolean!): [String!]!
+  stopCrawling(jobId: String!): String!
+  truncateNeo4j: String!
 }
 
 enum Operator {
@@ -29,7 +31,7 @@ enum Operator {
 type Query {
   job(jobId: String!): Job
   jobs: [Job!]!
-  entityTable(anyJobId: [String!], entityId: String, jobDepth: Int, offset: Int!, limit: Int!): [TableRow!]!
+  entityTable(anyJobId: [String!], entityId: String, jobDepth: Int, offset: Int!, limit: Int!): TableResult!
 }
 
 type Request {
@@ -42,11 +44,17 @@ type Request {
   childRequests: [Request!]!
 }
 
+type TableResult {
+  count: Int!
+  rows: [TableRow!]!
+}
+
 type TableRow {
   startJobId: String!
   startEntityValue: String!
   foundEntityId: String!
   foundEntityValue: String!
+  foundEntityJobId: String
   counter: Int!
 }
 
