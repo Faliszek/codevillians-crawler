@@ -4,6 +4,8 @@ import { List, Loader, Share2 } from "react-feather";
 import { gql, useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 
+import { Pagination } from "antd";
+
 const GET_TABLE = gql`
   query EntityTable(
     $entityId: String!
@@ -44,7 +46,7 @@ export function Results() {
   const { jobId } = useParams<P>();
 
   const { loading, data } = useQuery(GET_TABLE, {
-    variables: { entityId: null, jobDepth: null, offset: 0, limit: 1050 },
+    variables: { entityId: jobId, jobDepth: 1, offset: 0, limit: 50 },
   });
 
   if (loading)
@@ -84,12 +86,15 @@ export function Results() {
           {tab === "list" && (
             <div>
               <table className="w-full table-fixed  border">
-                <tr className="text-lg">
-                  <th className="w-1/4 text-center p-2">Słowo kluczowe</th>
-                  <th className="w-1/4 text-center  p-2">Rodzaj</th>
-                  <th className="w-1/4 text-center  p-2">Identyifkator</th>
-                  <th className="w-1/4 text-center  p-2">Wystąpienia</th>
-                </tr>
+                <thead>
+                  {" "}
+                  <tr className="text-lg">
+                    <th className="w-1/4 text-center p-2">Słowo kluczowe</th>
+                    <th className="w-1/4 text-center  p-2">Rodzaj</th>
+                    <th className="w-1/4 text-center  p-2">Identyifkator</th>
+                    <th className="w-1/4 text-center  p-2">Wystąpienia</th>
+                  </tr>
+                </thead>
                 <tbody>
                   {data?.entityTable?.map((e: Entity) => (
                     <tr>
@@ -106,6 +111,7 @@ export function Results() {
 
           {tab === "graph" && <div>Graf</div>}
         </div>
+        <Pagination size="small" />
       </div>
     </Page>
   );

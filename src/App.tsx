@@ -12,6 +12,7 @@ import { FAQ } from "./views/FAQ";
 import { Results } from "./views/Results";
 import "./tailwind.output.css";
 import "antd/dist/antd.less";
+import "./index.css";
 import { Database, HelpCircle } from "react-feather";
 
 function Menu() {
