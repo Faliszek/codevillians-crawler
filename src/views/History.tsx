@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { Page } from "../Page";
 import { Loader } from "react-feather";
 import { gql, useQuery } from "@apollo/client";
-import { Switch } from "antd";
 
 const GET_TABLE = gql`
   query EntityTable(

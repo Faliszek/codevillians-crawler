@@ -1,4 +1,4 @@
-import { Reducer, useEffect, useReducer, useRef } from "react";
+import { Reducer, useReducer } from "react";
 import { ArrowRight, MinusCircle, Plus } from "react-feather";
 import { useHistory } from "react-router-dom";
 import { Page } from "../Page";

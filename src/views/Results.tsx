@@ -162,7 +162,6 @@ export function Results() {
                 className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors focus:ring-2 focus:ring-blue-600"
                 onClick={() => {
                   for (const [key, value] of Object.entries(batches)) {
-                    console.log(`DUPA ${key}: ${value}`);
                     crawl({
                       variables: {
                         //@ts-ignore
