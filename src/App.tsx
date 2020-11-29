@@ -8,13 +8,12 @@ import {
 } from "react-router-dom";
 
 import { Main } from "./views/Main";
-import { FAQ } from "./views/FAQ";
 import { Results } from "./views/Results";
 import { History } from "./views/History";
 import "./tailwind.output.css";
 import "antd/dist/antd.less";
 import "./index.css";
-import { Database, HelpCircle, Search } from "react-feather";
+import { Database, Search } from "react-feather";
 
 function Menu() {
   return (
@@ -41,15 +40,6 @@ function Menu() {
             <span className="py-1 font-medium px-4">Wyszukaj</span>
           </NavLink>
         </li>
-        <NavLink
-          to="/faq"
-          exact={true}
-          activeClassName="bg-white text-blue-400 "
-          className="text-lg text-white flex items-center  py-2 px-2 transition rounded-xl hover:text-blue-100"
-        >
-          <HelpCircle />
-          <span className="py-1 font-medium px-4">FAQ</span>
-        </NavLink>
       </ul>
     </nav>
   );
@@ -67,9 +57,6 @@ function App() {
             </Route>
             <Route path="/results/:jobId/">
               <Results />
-            </Route>
-            <Route path="/faq">
-              <FAQ />
             </Route>
             <Route path="/search">
               <Main />
