@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import { Page } from "../Page";
 import { List, Loader, Share2, ArrowRight } from "react-feather";
 import { gql, useQuery } from "@apollo/client";
@@ -45,7 +46,8 @@ type P = {
 
 export function Results() {
   const [tab, setTab] = useState("list");
-  const { depth: depthParam } = useParams<P>();
+  const { jobId, depth: depthParam } = useParams<P>();
+  const history = useHistory();
   const [checked, setChecked] = useState<string[]>([]);
 
   const [depth, setDepth] = useState<number | null>(
@@ -67,6 +69,7 @@ export function Results() {
 
   React.useEffect(() => {
     if (depth) {
+      history.push(`/results/${jobId}/${depth}`);
       refetch({
         entityId: null,
         //@ts-ignore
@@ -114,9 +117,9 @@ export function Results() {
             {checked.length !== 0 ? (
               <button
                 className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors focus:ring-2 focus:ring-blue-600"
-                onClick={() =>
-                  setDepth((d: number | null) => (d == null ? 1 : d + 1))
-                }
+                onClick={() => {
+                  setDepth((d: number | null) => (d == null ? 1 : d + 1));
+                }}
               >
                 <span className="pr-4">({checked.length}) Wyszukaj</span>
                 <ArrowRight />
