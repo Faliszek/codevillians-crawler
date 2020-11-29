@@ -108,7 +108,7 @@ const GET_JOB = gql`
 export function Main() {
   const [state, dispatch] = useReducer<R>(reducer, initialState);
   const history = useHistory();
-  const [addJob, {  loading }] = useMutation(GET_JOB);
+  const [addJob, { loading }] = useMutation(GET_JOB);
 
   return (
     <Page title="Wyszukaj">
@@ -147,7 +147,7 @@ export function Main() {
           <div className="flex flex-1 items-center justify-center">
             <button
               onClick={() => dispatch({ type: "addSearch" })}
-              className="px-6 py-2 rounded-full shadow-lg text-blue-400 font-extrabold flex items-center justify-center bg-blue-100 outline-none my-2 hover:bg-blue-400 hover:text-white transition-colors"
+              className="px-6 py-2 rounded-full shadow-lg text-blue-400 font-extrabold flex items-center justify-center bg-blue-100 focus:ring-2 focus:ring-blue-600 my-2 hover:bg-blue-400 hover:text-white transition-colors "
             >
               <Plus size={24} />
 
@@ -157,11 +157,13 @@ export function Main() {
         </div>
         <div className="flex justify-center mt-4">
           <button
-            className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors "
+            className="relative bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors   focus:ring-2 focus:ring-blue-600"
             onClick={() => {
               addJob({
                 variables: {
-                  phrases: state.searches.map((s) => s.value),
+                  phrases: state.searches
+                    .filter((s) => s.value !== "")
+                    .map((s) => s.value),
                   operator: "AND",
                   iterations: 1,
                   emailEntityEnabled: true,
@@ -174,7 +176,13 @@ export function Main() {
                 .then((res) => {
                   history.push(`/results/${res?.data?.startCrawling}`);
                 })
-                .catch(() => notification.error({ message: "Error occured" }));
+                .catch(() =>
+                  notification.error({
+                    message: "Wystąpił błąd",
+                    description:
+                      "Wystąpił nieoczekiwany błąd podczas próby komunikacji z serwerem",
+                  })
+                );
             }}
           >
             <span className="pr-4">Wyszukaj</span>

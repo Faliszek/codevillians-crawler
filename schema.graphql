@@ -17,26 +17,8 @@ Long can represent values between -(2^63) and 2^63 - 1.
 scalar Long
 
 type Mutation {
-  startCrawling(
-    phrases: [String!]!
-    operator: String!
-    iterations: Int!
-    emailEntityEnabled: Boolean!
-    phoneNumberEntityEnabled: Boolean!
-    bitcoinAddressEnabled: Boolean!
-    ssnNumberEnabled: Boolean!
-    creditCardEnabled: Boolean!
-  ): String!
-  crawlChoosenEntities(
-    parentJobId: String!
-    entityValues: [String!]!
-    iterations: Int!
-    emailEntityEnabled: Boolean!
-    phoneNumberEntityEnabled: Boolean!
-    bitcoinAddressEnabled: Boolean!
-    ssnNumberEnabled: Boolean!
-    creditCardEnabled: Boolean!
-  ): [String!]!
+  startCrawling(phrases: [String!]!, operator: String!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!, bitcoinAddressEnabled: Boolean!, ssnNumberEnabled: Boolean!, creditCardEnabled: Boolean!): String!
+  crawlChoosenEntities(parentJobId: String!, entityValues: [String!]!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!, bitcoinAddressEnabled: Boolean!, ssnNumberEnabled: Boolean!, creditCardEnabled: Boolean!): [String!]!
 }
 
 enum Operator {
@@ -47,13 +29,7 @@ enum Operator {
 type Query {
   job(jobId: String!): Job
   jobs: [Job!]!
-  entityTable(
-    anyJobId: [String!]
-    entityId: String
-    jobDepth: Int
-    offset: Int!
-    limit: Int!
-  ): [TableRow!]!
+  entityTable(anyJobId: [String!], entityId: String, jobDepth: Int, offset: Int!, limit: Int!): [TableRow!]!
 }
 
 type Request {
@@ -73,3 +49,4 @@ type TableRow {
   foundEntityValue: String!
   counter: Int!
 }
+

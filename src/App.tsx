@@ -19,7 +19,7 @@ function Menu() {
   return (
     <nav className="min-h-screen w-48  bg-blue-400 shadow-md py-16 px-2">
       <ul>
-        <li>
+        <li className="mb-2">
           <NavLink
             to="/"
             activeClassName="bg-white text-blue-400 "
@@ -50,7 +50,7 @@ function App() {
         <Menu />
         <div className="flex-1 p-16">
           <Switch>
-            <Route path="/results/:jobId">
+            <Route path="/results/:jobId/:depth">
               <Results />
             </Route>
             <Route path="/faq">
