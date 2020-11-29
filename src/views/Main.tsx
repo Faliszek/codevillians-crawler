@@ -1,5 +1,6 @@
 import { Reducer, useEffect, useReducer, useRef } from "react";
 import { ArrowRight, MinusCircle, Plus, Search } from "react-feather";
+import { useHistory } from "react-router-dom";
 
 type Action =
   | { type: "addSearch" }
@@ -67,6 +68,7 @@ type R = Reducer<State, Action>;
 
 export function Main() {
   const [state, dispatch] = useReducer<R>(reducer, initialState);
+  const history = useHistory();
 
   return (
     <div className="rounded-lg bg-white p-8 shadow-md border border-gray-100">
@@ -119,7 +121,10 @@ export function Main() {
         className="rounded-lg"
         open={false}
       /> */}
-      <button className="bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors ">
+      <button
+        className="bg-blue-300 rounded-full px-6 py-2 text-white text-lg flex items-center font-medium shadow-md hover:bg-blue-400 transition-colors "
+        onClick={() => history.push("/results")}
+      >
         <span className="pr-4">Wyszukaj</span>
         <ArrowRight />
       </button>

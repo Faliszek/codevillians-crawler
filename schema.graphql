@@ -1,0 +1,62 @@
+type CreateExampleResult {
+  result: String
+  errors: [String!]
+}
+
+input ExampleInput {
+  id: String!
+  value: String!
+}
+
+type Job {
+  id: String!
+  parentJob: String
+  jobDepth: Int!
+  name: String!
+  startTime: Long!
+  operator: Operator!
+  phrases: [String!]!
+  iterations: Int!
+  allRequests: [Request!]!
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole numeric values.
+Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+
+type Mutation {
+  addExample(example: ExampleInput!): CreateExampleResult!
+  startCrawling(phrases: [String!]!, operator: String!, iterations: Int!, emailEntityEnabled: Boolean!, phoneNumberEntityEnabled: Boolean!): String!
+}
+
+enum Operator {
+  OR
+  AND
+}
+
+type Query {
+  job(jobId: String!): Job
+  jobs: [Job!]!
+  entityTable(entityId: String, jobDepth: Int, offset: Int!, limit: Int!): [TableRow!]!
+}
+
+type Request {
+  requestId: String!
+  url: String!
+  parentRequest: String
+  depth: Int!
+  jobId: String!
+  startTime: Long!
+  childRequests: [Request!]!
+}
+
+type TableRow {
+  startJobId: String!
+  startEntityValue: String!
+  foundEntityId: String!
+  fountEntityValue: String!
+  counter: Int!
+}
+

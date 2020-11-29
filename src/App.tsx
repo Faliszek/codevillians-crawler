@@ -9,6 +9,7 @@ import {
 
 import { Main } from "./views/Main";
 import { FAQ } from "./views/FAQ";
+import { Results } from "./views/Results";
 import "./tailwind.output.css";
 import "antd/dist/antd.less";
 import { Database, HelpCircle } from "react-feather";
@@ -20,7 +21,6 @@ function Menu() {
         <li>
           <NavLink
             to="/"
-            exact={true}
             activeClassName="bg-white text-blue-400 "
             className="text-lg text-white flex items-center py-2 px-2 transition rounded-xl"
           >
@@ -49,6 +49,9 @@ function App() {
         <Menu />
         <div className="flex-1 p-16">
           <Switch>
+            <Route path="/results">
+              <Results />
+            </Route>
             <Route path="/faq">
               <FAQ />
             </Route>
