@@ -95,7 +95,8 @@
     "start": "npm-run-all build:tailwind --parallel watch:tailwind start:react",
     "start:react": "node scripts/start.js",
     "prebuild": "run-s build:tailwind",
-    "get-schema": "npx get-graphql-schema http://35.234.159.89:8080/graphql  > schema.graphql && npx get-graphql-schema http://35.234.159.89:8080/graphql -j > graphql_schema.json"
+    "get-schema": "npx get-graphql-schema http://35.234.159.89:8080/graphql  > schema.graphql && npx get-graphql-schema http://35.234.159.89:8080/graphql -j > graphql.schema.json",
+    "generate-types": "graphql-codegen --config codegen.yml"
   },
   "eslintConfig": {
     "extends": [
@@ -171,5 +172,12 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "@graphql-codegen/cli": "1.19.3",
+    "@graphql-codegen/typescript-react-apollo": "2.2.1",
+    "@graphql-codegen/typescript-operations": "1.17.12",
+    "@graphql-codegen/typescript": "1.18.1",
+    "@graphql-codegen/introspection": "1.18.1"
   }
 }

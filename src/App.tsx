@@ -49,7 +49,7 @@ function App() {
         <Menu />
         <div className="flex-1 p-16">
           <Switch>
-            <Route path="/results">
+            <Route path="/results/:jobId">
               <Results />
             </Route>
             <Route path="/faq">
