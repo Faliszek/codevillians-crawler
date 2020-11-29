@@ -108,7 +108,7 @@ const GET_JOB = gql`
 export function Main() {
   const [state, dispatch] = useReducer<R>(reducer, initialState);
   const history = useHistory();
-  const [addJob, { data, loading }] = useMutation(GET_JOB);
+  const [addJob, {  loading }] = useMutation(GET_JOB);
 
   return (
     <Page title="Wyszukaj">
