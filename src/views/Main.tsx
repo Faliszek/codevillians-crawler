@@ -1,5 +1,5 @@
 import { Reducer, useEffect, useReducer, useRef } from "react";
-import { ArrowRight, MinusCircle, Plus, Search } from "react-feather";
+import { ArrowRight, MinusCircle, Plus } from "react-feather";
 import { useHistory } from "react-router-dom";
 
 type Action =

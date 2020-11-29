@@ -30,9 +30,9 @@ export function Results() {
       </div>
 
       <div className="">
-        {tab == "list" && <div>Tabela nested</div>}
+        {tab === "list" && <div>Tabela nested</div>}
 
-        {tab == "graph" && <div>Graf</div>}
+        {tab === "graph" && <div>Graf</div>}
       </div>
     </div>
   );
